@@ -5,6 +5,27 @@
 	<style>
 		div {background : #FFF; padding:10px; margin:10px;}
 	</style>
+	<script src="https://www.gstatic.com/firebasejs/5.5.8/firebase.js"></script>
+	<script>
+ 	 // Initialize Firebase
+	  var config = {
+    	apiKey: "AIzaSyDVxsSJVuvO19B5CFf8-xo1UR8MjOlehG8",
+	   	authDomain: "test-62fe2.firebaseapp.com",
+	    databaseURL: "https://test-62fe2.firebaseio.com",
+	    projectId: "test-62fe2",
+	    storageBucket: "",
+	    messagingSenderId: "61643465606"
+	  };
+	  firebase.initializeApp(config);
+	  var db = firebase.database();
+	  db.ref('mesgs').on('value' , function(snapshot){
+	  	$("#chatlist").html("");
+    snapshot.forEach(function(child){
+        	$("#chatlist").prepend("<div>"+child.val().message+"</div>");
+        	
+        });
+    })
+	</script>
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
@@ -20,7 +41,9 @@
 				$(".text_2").css("color","red");
 			});*/
 			$("#btn_3").on("click", function(){
-				$("#chatlist").prepend("<div>"+$("#text_1").val()+"</div>");
+				
+				db.ref("mesgs/").push().set({"message": $("#text_1").val()});
+				$("#text_1").val("");
 			});
 			/*$("#btn_4").on("click", function(){
 				alert($("#text_1").val());
