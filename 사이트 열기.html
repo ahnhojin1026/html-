@@ -18,9 +18,11 @@
 	  };
 	  firebase.initializeApp(config);
 	  var db = firebase.database();
+	  var chatList = [];
 	  db.ref('mesgs').on('value' , function(snapshot){
 	  	$("#chatlist").html("");
     snapshot.forEach(function(child){
+        	chatList.push(child)
         	$("#chatlist").prepend("<div>"+child.val().message+"</div>");
         	
         });
@@ -40,10 +42,20 @@
 				//동적으로 값 넣어보기 가져와보기
 				$(".text_2").css("color","red");
 			});*/
+			
+
 			$("#btn_3").on("click", function(){
 				
 				db.ref("mesgs/").push().set({"message": $("#text_1").val()});
 				$("#text_1").val("");
+			});
+			$("#btn_4").on("click", function(){
+				$("#chatlist").html("");		
+				for(var i=0;i<chatList.length;i++){
+					if(chatList[i].val().message.indexOf($("#text_2").val())>=0){
+						$("#chatlist").append("<div>"+chatList[i].val().message+"</div>");
+					}
+				}
 			});
 			/*$("#btn_4").on("click", function(){
 				alert($("#text_1").val());
@@ -56,9 +68,12 @@
 	<!-- on click 구현 -->
 	<!-- <input type = 'button' id="btn_1"/> -->
 	<!-- <input type = 'button' id="btn_2"/> -->
-	<input type = 'button' id="btn_3"/>
+	<input type = 'button' id="btn_3" value="보내기" />
+	<input type = 'text' id="text_1" placeholder="내용을 입력하세요. " />
+	<input type = 'button' id="btn_4" value="검색하기"/>
 	<!-- <input type = 'button' id="btn_4"/> -->
-	<input type = 'text' id="text_1"/>
+	
+	<input type = 'text' id="text_2" placeholder="내용을 입력하세요. "/>
 	<!-- <input type = 'text' id="me" class="text_2"/> -->
 	<!-- <input type = 'text' class="text_2"/> -->
 	<div id = chatlist>
